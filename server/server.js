@@ -1,15 +1,20 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const bodyParser = require('body-parser')
 
 const app = express();
 require('dotenv').config({
     path: './config/index.env'
 })
 
-app.use(express.urlencoded({ extended: true }))
+const connectDB = require('./config/db')
+connectDB()
+app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use(cors())
+
+app.use('/api/user', require('./routes/auth.route'))
 
 app.get('/', (req, res) => {
     res.send('running')
